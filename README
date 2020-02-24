@@ -1,0 +1,80 @@
+
+	Protocoale de Comunicatii - Tema 3 - Taner Mustafa - 325 CB - 16 Mai 2019
+	
+	
+	> Mod de compilare in CLI:
+		./make
+	> Mod de rulare CLI:
+		./client
+	
+	
+	Tema este bazata pe laboratorul 10 si contine fisierele:
+		
+		> helpers.c, helpers.h - extrase din laborator, contin metodele de 
+		conexiune cu serverul, de compunere a query-urilor si de trimitere 
+		si primire a mesajelor;
+		
+		> parson.c, parson.h - contin metodele de parsare a textelor in format
+		JSON;
+		
+		> client.c - implementare propriu-zisa a temei, contine functiile de 
+		compunere a query-urilor de tip "GET" si "POST", functiile de parsare
+		ale mesajelor primite de la server si o functie ce gaseste IP-ul 
+		unui server.
+		
+		
+	Functiile din <helpers> si <parson> sunt deja cunoscute, asa ca voi descrie 
+	functiile implementate de mine in <client.c>:
+	
+		> void parseData (char* response, char* url, char* params, char* method, 
+		char* content_type, char* username, char* password, char* token, char* id)
+			~ parseaza textul <response> (care este in format JSON) cu ajutorul 
+			functiilor din <parson> si retine valorile salvate in variabilele 
+			data prin referinta, denumite sugestiv.
+			~ este folosit pentru parsarea mesajelor primite in urma rezolvarii 
+			task-urilor 1, 2 si 3.
+			
+		> void parseMoreData (char* response, char* url, char* params, char* method, 
+		char* content_type, char* url2, char* q, char* APPID, char* method2)
+			~ ~ parseaza textul <response> (care este in format JSON) cu ajutorul 
+			functiilor din <parson> si retine valorile salvate in variabilele 
+			data prin referinta, denumite sugestiv.
+			~ este folosit pentru parsarea mesajului primit in urma rezolvarii 
+			task-ului 4.
+			
+		> void parseCookies (char *message, char *cookies)
+			~ parseaza textul <message> (care este un raspuns primit de la 
+			un server in urma unui query, continand atat header, cat si body) 
+			si gaseste in acesta cookie-urile, retinandu-le in variabila data 
+			prin referinta <cookies>.
+			
+		> char* compute_post_request(char* url, char* url_params, char* host, 
+		char* content_type, char* cookies, char* body, char* authorization)
+			~ compune request-ul pentru un query de tip <POST>; este universal, 
+			poate insera orice camp necesar in acest apel (pentru tema curenta).
+			~ daca, la apelare, un camp nu exista sau nu se doreste a se trece, 
+			se poate introduce un string gol (de lungime 0) in locul sau.
+			
+		> char* compute_get_request(char* url, char* url_params, char* host, 
+		char* cookies, char* authorization)
+			~ compune request-ul pentru un query de tip <GET>; este universal, 
+			poate insera orice camp necesar in acest apel (pentru tema curenta).
+			~ daca, la apelare, un camp nu exista sau nu se doreste a se trece, 
+			se poate introduce un string gol (de lungime 0) in locul sau.
+			
+		> void get_ip (char* host, char ip[100])
+			~ apeleaza serverul DNS si gaseste IP-ul pentru serverul cu numele 
+			<host> si il salveaza in variabila data prin referinta <ip>.
+			
+		> int main(int argc, char *argv[])
+			~ TASK 1: trimite request-ul <GET> asa cum este cerut in cerinta.
+			~ TASK 2, 3, 4: parseaza raspunsul primit la task-ul anterior si 
+			executa query-ul cerut (afla din mesajul primit ce metoda sa aplice).
+			~ TASK 5: parseaza raspunsul de la 4, apeleaza serverul HTTP cu datele
+			extrase din raspuns, primeste informatiile legate de starea vremii si
+			le trimite catre serverul principal.
+	
+	Ce este hardocat: cheile din textele tip JSON (hardcodare permisa). 
+	Exceptand cheile, totul este programatic: valorile cheilor, metoda folosite, 
+	datele serverului etc..
+	
